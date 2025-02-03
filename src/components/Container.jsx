@@ -83,7 +83,7 @@ function Container() {
 
   const handlePageChange = async (page) => {
     setLoading(true);
-    if (genre.length !== 0) {
+    if (!genre) {
       const result = await fetchMoviesAndTvShows(query, language, page, type);
       processResult(result, page);
     } else {

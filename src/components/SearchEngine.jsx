@@ -53,6 +53,11 @@ function SearchEngine({ onSearch }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, !isGenreEnabled]);
 
+  useEffect(() => {
+    setSearchQuery("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGenreEnabled]);
+
   const handleGenreClick = () => {
     if (!genreList[type]) {
       fetchGenreTypesForTvOrMovies(type).then((genres) => {
