@@ -27,36 +27,47 @@ function SearchEngine({ onSearch }) {
     setSelectedGenres,
     loading,
     setLocalSelectedGenres,
+    previousTypeRef,
   } = useContext(SearchContext);
 
   useDisabledScrolling(isGenreModalOpen);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      handleSearch();
-    }, 600);
+  const handleTypeChange = (value) => {
+    setSearchGenre([]);
+    setSelectedGenres([]);
+    setLocalSelectedGenres([]);
+    setType(value);
+  };
 
-    return () => {
-      clearTimeout(handler);
-    };
+  useEffect(() => {
+    if (!isGenreEnabled) {
+      setSearchGenre([]);
+      setSelectedGenres([]);
+      setLocalSelectedGenres([]);
+    }
+    setSearchQuery("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGenreEnabled]);
+
+  useEffect(() => {
+    if (type !== previousTypeRef.current) {
+      handleSearch();
+      previousTypeRef.current = type;
+    } else {
+      const handler = setTimeout(() => {
+        handleSearch();
+      }, 600);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deferredQuery, language, type, searchGenre]);
 
   const handleSearch = () => {
     onSearch(deferredQuery, language, type, isGenreEnabled && searchGenre);
   };
-
-  useEffect(() => {
-    setSearchGenre([]);
-    setSelectedGenres([]);
-    setLocalSelectedGenres([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type, !isGenreEnabled]);
-
-  useEffect(() => {
-    setSearchQuery("");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isGenreEnabled]);
 
   const handleGenreClick = () => {
     if (!genreList[type]) {
@@ -117,7 +128,7 @@ function SearchEngine({ onSearch }) {
                 border: "1px solid #ccc",
               }}
               value={type}
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) => handleTypeChange(e.target.value)}
             >
               <option value={Movies}>{Movies}</option>
               <option value={TVShows}>{TVShows}</option>

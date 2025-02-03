@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useState, useRef } from "react";
 import SearchContext from "./SearchContext";
 import { English } from "../constants/constants";
 
@@ -15,6 +15,7 @@ const SearchProvider = ({ children }) => {
   const [error, setError] = useState("");
   const [isGridView, setIsGridView] = useState(true);
   const [type, setType] = useState("Movies");
+  const previousTypeRef = useRef(type);
   const [genre, setGenre] = useState([]);
   const [searchGenre, setSearchGenre] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -69,6 +70,7 @@ const SearchProvider = ({ children }) => {
         setIsGenreModalOpen,
         localSelectedGenres,
         setLocalSelectedGenres,
+        previousTypeRef,
       }}
     >
       {children}
