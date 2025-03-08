@@ -90,14 +90,16 @@ button:hover {
   height: 80vh;
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
 }
-
 .custom-modal .modal-content {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
 .custom-modal .modal-body {
-  overflow-y: auto;
-  max-height: calc(80vh - 120px);
+  flex: 1 1 auto;
+  overflow-y: auto; 
+  max-height: calc(100vh - 200px);
 }
 
 .custom-image {
@@ -182,3 +184,27 @@ button:hover {
   color: #ff6b6b; 
   transform: scale(1.05) }
 
+
+  .custom-flag {
+    display: inline-block;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+    transition: opacity 0.3s ease; 
+  }
+  
+  .custom-flag:hover {
+    opacity: 0.5; 
+  }
+
+  .modal-footer-custom {
+    display: grid; 
+    gap: 10px; 
+    padding: 10px;
+    max-width: 100%; 
+  }
+  
+  .streaming-details-wrapper {
+    max-height: 200px; 
+    overflow-y: auto; 
+    width: 100%; 
+  }
+  

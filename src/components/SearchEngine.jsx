@@ -56,7 +56,7 @@ function SearchEngine({ onSearch }) {
     } else {
       const handler = setTimeout(() => {
         handleSearch();
-      }, 600);
+      }, 1000);
 
       return () => {
         clearTimeout(handler);

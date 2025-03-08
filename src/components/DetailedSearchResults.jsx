@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { renderItemDetails } from "../utils/renderItemDetails";
 import { handleBackdropClick } from "../utils/handleModuleBackDropClick";
 import { IMDB } from "../constants/constants";
+import StreamingPlatforms from "./StreamingPlatforms";
 
 function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
   const { title, overview, posterPath, year } = renderItemDetails(
@@ -29,7 +30,7 @@ function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
             </h5>
             <button
               type="button"
-              className="btn-close"
+              className="btn-close mb-2"
               onClick={onClose}
             ></button>
           </div>
@@ -41,9 +42,11 @@ function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
             />
             <p>{overview}</p>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer-custom">
+            <StreamingPlatforms item={item} modalButton />
             <button
               type="button"
+              aria-label="close"
               className="btn btn-secondary"
               onClick={onClose}
             >

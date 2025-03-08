@@ -8,6 +8,7 @@ import useDisabledScrolling from "../hooks/useDisabledScrolling";
 import { renderItemDetails } from "../utils/renderItemDetails";
 import { openInNewTab } from "../utils/openInNewTab";
 import { IMDB } from "../constants/constants";
+import StreamingPlatforms from "./StreamingPlatforms";
 
 function SearchResults({ onPageChange, onViewToggle }) {
   const {
@@ -44,7 +45,7 @@ function SearchResults({ onPageChange, onViewToggle }) {
         className={`fade-in
           ${
             isGridView
-              ? "col-md-6 col-lg-3 mb-4"
+              ? "col-lg-6 col-xl-4 mb-4"
               : "list-group-item m-2 hover-effect rounded"
           }`}
         key={item.id}
@@ -54,16 +55,20 @@ function SearchResults({ onPageChange, onViewToggle }) {
             <img src={posterPath} className="card-img-top" alt={title} />
             <div className="card-body bg-light">
               <h5
-                className="card-title hover-effect-text"
+                className="card-title hover-effect-text pb-2"
                 onClick={() => titleClick(title)}
                 title={IMDB + title}
                 aria-label={title}
               >
                 {title} {year}
               </h5>
+              <StreamingPlatforms item={item} />
               <p
                 className="card-text"
-                style={{ overflowY: "auto", maxHeight: "15vh" }}
+                style={{
+                  overflowY: "auto",
+                  maxHeight: "calc(100% - 80px)",
+                }}
               >
                 {overview}
               </p>

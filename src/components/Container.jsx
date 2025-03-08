@@ -30,6 +30,7 @@ function Container() {
     setGenre,
     hasSearched,
     setHasSearched,
+    previousTypeRef,
   } = useContext(SearchContext);
 
   const processResult = (result, page) => {
@@ -54,31 +55,39 @@ function Container() {
     setLoading(true);
 
     const pageToFetch =
-      searchQuery !== query || searchType !== type || searchGenre !== genre
+      searchQuery !== query ||
+      searchType !== previousTypeRef.current ||
+      searchGenre !== genre
         ? 1
         : currentPage;
 
-    const result = !searchGenre
-      ? await fetchMoviesAndTvShows(
-          searchQuery,
-          searchLanguage,
-          pageToFetch,
-          searchType
-        )
-      : await fetchMoviesAndTvShowsWithGenres(
-          searchLanguage,
-          pageToFetch,
-          type,
-          searchGenre
-        );
+    try {
+      const result = !searchGenre
+        ? await fetchMoviesAndTvShows(
+            searchQuery,
+            searchLanguage,
+            pageToFetch,
+            searchType
+          )
+        : await fetchMoviesAndTvShowsWithGenres(
+            searchLanguage,
+            pageToFetch,
+            type,
+            searchGenre
+          );
 
-    processResult(result, pageToFetch);
+      processResult(result, pageToFetch);
 
-    setQuery(searchQuery);
-    setLanguage(searchLanguage);
-    setType(searchType);
-    setGenre(searchGenre);
-    setHasSearched(true);
+      setQuery(searchQuery);
+      setLanguage(searchLanguage);
+      setType(searchType);
+      setGenre(searchGenre);
+      setHasSearched(true);
+    } catch (error) {
+      console.error("Error during search:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePageChange = async (page) => {

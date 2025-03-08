@@ -14,16 +14,16 @@ const apiUrls = {
   },
 };
 
-async function fetchData(apiUrl, params) {
+async function fetchData(apiUrl, params, headers) {
   try {
-    const response = await axios.get(apiUrl, { params });
+    const response = await axios.get(apiUrl, { params, headers });
     return response.data;
   } catch (error) {
     if (error.response.status === 429) {
       return "Too many requests. Please try again later.";
     } else {
       console.error(`Error fetching data:`, error);
-      return "An error occurred. Please try again later.";
+      throw error;
     }
   }
 }
@@ -123,4 +123,26 @@ export async function fetchMoviesAndTvShowsWithGenres(
   }
 
   return `Total Pages: ${totalPages}, Data: ${JSON.stringify(items)}`;
+}
+
+export async function fetchStreamingPlatforms(typeAndId) {
+  const baseUrl = import.meta.env.VITE_STREAMING_PLATFORMS_API_URL;
+  const apiUrl = `${baseUrl}/${typeAndId}`;
+  const params = {
+    series_granularity: "episode",
+    output_language: "en",
+  };
+
+  const headers = {
+    "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+    "x-rapidapi-key": import.meta.env.VITE_STREAMING_PLATFORMS_API_KEY,
+  };
+
+  try {
+    const data = await fetchData(apiUrl, params, headers);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching streaming platforms:`, error);
+    throw error.message;
+  }
 }
