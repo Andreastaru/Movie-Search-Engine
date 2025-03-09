@@ -31,7 +31,8 @@ function SearchResults({ onPageChange, onViewToggle }) {
 
   const titleClick = (title) => {
     const path = typeMappingForStreaming[type] + title;
-    const correctUrl = TMDB + path;
+    const languageForUrl = `?language=${language}`;
+    const correctUrl = TMDB + path + languageForUrl;
     openInNewTab(correctUrl);
   };
 

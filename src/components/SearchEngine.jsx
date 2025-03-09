@@ -1,5 +1,11 @@
 import { useContext, useEffect } from "react";
-import { English, Estonian, Movies, TVShows } from "../constants/constants";
+import {
+  English,
+  Estonian,
+  Movies,
+  Spanish,
+  TVShows,
+} from "../constants/constants";
 import PropTypes from "prop-types";
 import { Container, Button } from "react-bootstrap";
 import { fetchGenreTypesForTvOrMovies } from "../api/ApiCalls";
@@ -116,6 +122,7 @@ function SearchEngine({ onSearch }) {
               onChange={(e) => setLanguage(e.target.value)}
             >
               <option value={English}>English</option>
+              <option value={Spanish}>Spanish</option>
               <option value={Estonian}>Estonian</option>
             </select>
           </div>

@@ -1,4 +1,10 @@
-import { Movies, TVShows, English, Estonian } from "../constants/constants";
+import {
+  Movies,
+  TVShows,
+  English,
+  Estonian,
+  Spanish,
+} from "../constants/constants";
 
 export const renderItemDetails = (type, language, item = {}) => {
   let title = "";
@@ -8,12 +14,14 @@ export const renderItemDetails = (type, language, item = {}) => {
 
   const descriptionMovie = {
     [English]: `${Movies} Description is missing`,
-    [Estonian]: `Filmi kirjeldus puudub`,
+    [Estonian]: "Filmi kirjeldus puudub",
+    [Spanish]: "Falta la descripción de la película",
   };
 
   const descriptionTVShows = {
     [English]: `${TVShows} Description is missing`,
-    [Estonian]: `Sarja kirjeldus puudub`,
+    [Estonian]: "Sarja kirjeldus puudub",
+    [Spanish]: "Falta la descripción del programa de televisión",
   };
 
   const blankPicture =
