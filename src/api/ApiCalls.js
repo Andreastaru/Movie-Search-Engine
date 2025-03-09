@@ -6,16 +6,19 @@ const apiUrls = {
     search: import.meta.env.VITE_MOVIES_API_URL,
     genre: import.meta.env.VITE_MOVIES_GENRE_API_URL,
     genreList: import.meta.env.VITE_GENRELIST_MOVIES,
+    trending: import.meta.env.VITE_TRENDING_MOVIES_API_URL,
   },
   [TVShows]: {
     search: import.meta.env.VITE_TVSHOW_API_URL,
     genre: import.meta.env.VITE_TVSHOW_GENRE_API_URL,
     genreList: import.meta.env.VITE_GENRELIST_TVSHOW,
+    trending: import.meta.env.VITE_TRENDING_TVSHOW_API_URL,
   },
 };
 
 async function fetchData(apiUrl, params, headers) {
   try {
+    console.log(params);
     const response = await axios.get(apiUrl, { params, headers });
     return response.data;
   } catch (error) {
@@ -116,6 +119,39 @@ export async function fetchMoviesAndTvShowsWithGenres(
 
   if (pageNr > totalPages) {
     return fetchMoviesAndTvShowsWithGenres(language, 1, type, genreId);
+  }
+
+  if (!results) {
+    return `No ${type} found`;
+  }
+
+  return `Total Pages: ${totalPages}, Data: ${JSON.stringify(items)}`;
+}
+
+export async function fetchTrendingMoviesAndTvShows(language, pageNr, type) {
+  const apiUrl = apiUrls[type]?.trending;
+  if (!apiUrl) {
+    return `Invalid search type: ${type}`;
+  }
+
+  const params = {
+    api_key: import.meta.env.VITE_API_KEY,
+    language: language,
+    page: pageNr,
+    include_adult: false,
+  };
+
+  const data = await fetchData(apiUrl, params);
+  if (typeof data === "string") return data;
+
+  const {
+    total_pages: totalPages,
+    results: items,
+    total_results: results,
+  } = data;
+
+  if (pageNr > totalPages) {
+    return fetchTrendingMoviesAndTvShows(language, 1, type);
   }
 
   if (!results) {

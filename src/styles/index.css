@@ -158,6 +158,40 @@ button:hover {
   transform: scale(1.02); 
 }
 
+.header-white {
+  font-family: 'Arial', sans-serif; 
+  font-weight: bold; 
+  color: rgb(203, 203, 203); 
+  background: linear-gradient(45deg, rgb(212, 212, 212), rgb(254, 254, 254)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  margin-bottom: 1.5rem; 
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.header-white.h5 {
+  font-family: 'Arial', sans-serif; 
+  font-weight: bold; 
+  color: rgb(203, 203, 203); 
+  background: linear-gradient(45deg, rgb(212, 212, 212), rgb(254, 254, 254)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  margin-bottom: 1.5rem; 
+  transition: color 0.3s ease, transform 0.3s ease; 
+  
+}
+
+
+.header-white.h5 {
+  background: linear-gradient(45deg, rgb(212, 212, 212), rgb(254, 254, 254)); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+}
+
 .footer {
   font-family: 'Arial', sans-serif; 
   font-weight: bold; 
@@ -224,4 +258,11 @@ button:hover {
   .clicker:hover {
     background-color: inherit;
   }
+
+  *:disabled {
+    opacity: 30% !important; 
+    background-color:black !important;
+  }
+
+  
   

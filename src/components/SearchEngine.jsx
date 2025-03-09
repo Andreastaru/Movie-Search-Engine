@@ -1,9 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   English,
   Estonian,
   Movies,
   Spanish,
+  trendingMapping,
   TVShows,
 } from "../constants/constants";
 import PropTypes from "prop-types";
@@ -34,7 +35,14 @@ function SearchEngine({ onSearch }) {
     loading,
     setLocalSelectedGenres,
     previousTypeRef,
+    setIsSearchedByTrending,
+    isSearchedByTrending,
+    previousLanguageRef,
+    searchResultsType,
   } = useContext(SearchContext);
+
+  const [userSearchedForTrendingData, setUserSearchedForTrendingData] =
+    useState(false);
 
   useDisabledScrolling(isGenreModalOpen);
 
@@ -51,26 +59,41 @@ function SearchEngine({ onSearch }) {
       setSelectedGenres([]);
       setLocalSelectedGenres([]);
     }
+    setUserSearchedForTrendingData(false);
     setSearchQuery("");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGenreEnabled]);
 
   useEffect(() => {
-    if (type !== previousTypeRef.current) {
+    const shouldSearchImmediately = () => {
+      return (
+        language !== previousLanguageRef.current ||
+        type !== previousTypeRef.current ||
+        (isSearchedByTrending && userSearchedForTrendingData) ||
+        (isGenreEnabled && searchGenre)
+      );
+    };
+
+    if (shouldSearchImmediately()) {
       handleSearch();
+      previousLanguageRef.current = language;
       previousTypeRef.current = type;
     } else {
       const handler = setTimeout(() => {
         handleSearch();
       }, 1000);
-
-      return () => {
-        clearTimeout(handler);
-      };
+      return () => clearTimeout(handler);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deferredQuery, language, type, searchGenre]);
+  }, [deferredQuery, language, type, searchGenre, userSearchedForTrendingData]);
 
+  const handleTrendingClick = () => {
+    setSearchQuery("");
+    setIsSearchedByTrending(true);
+    setUserSearchedForTrendingData(true);
+    if (isGenreEnabled) setIsGenreEnabled(false);
+    if (isGenreModalOpen) setIsGenreModalOpen(false);
+  };
   const handleSearch = () => {
     onSearch(deferredQuery, language, type, isGenreEnabled && searchGenre);
   };
@@ -103,7 +126,8 @@ function SearchEngine({ onSearch }) {
             className="form-control m-2"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Search for ${type}...`}
+            onFocus={() => setUserSearchedForTrendingData(false)}
+            placeholder={`Search for ${type} or enter keywords...`}
             disabled={isGenreEnabled}
             style={{ borderRadius: "5px", border: "1px solid #ccc" }}
           />
@@ -150,6 +174,7 @@ function SearchEngine({ onSearch }) {
             style={{ cursor: "pointer" }}
             checked={isGenreEnabled}
             onChange={(e) => setIsGenreEnabled(e.target.checked)}
+            onClick={() => setUserSearchedForTrendingData(false)}
           />
           <label className="m-2">{`Enable this to search most popular ${type} by genre`}</label>
           <Button
@@ -169,6 +194,17 @@ function SearchEngine({ onSearch }) {
                   .join(", ")
               : "Select a genre"}
           </Button>
+        </div>
+        <div className="form-group d-flex align-items-center">
+          <button
+            type="button"
+            className="btn btn-primary shadow-lg rounded w-100"
+            aria-label={`Search what ${type} are trending at the moment`}
+            onClick={() => handleTrendingClick()}
+            disabled={searchResultsType === trendingMapping}
+          >
+            {`Find Trending ${type}`}
+          </button>
         </div>
       </div>
       <GenreModal

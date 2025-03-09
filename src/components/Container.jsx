@@ -3,10 +3,16 @@ import SearchContext from "../context/SearchContext";
 import {
   fetchMoviesAndTvShowsWithGenres,
   fetchMoviesAndTvShows,
+  fetchTrendingMoviesAndTvShows,
 } from "../api/ApiCalls";
 import SearchEngine from "./SearchEngine";
 import SearchResults from "./SearchResults";
 import Footer from "./Footer";
+import {
+  trendingMapping,
+  queryMapping,
+  genreMapping,
+} from "../constants/constants";
 
 function Container() {
   const {
@@ -31,6 +37,9 @@ function Container() {
     hasSearched,
     setHasSearched,
     previousTypeRef,
+    isSearchedByTrending,
+    setIsSearchedByTrending,
+    setSearchResultsType,
   } = useContext(SearchContext);
 
   const processResult = (result, page) => {
@@ -62,27 +71,48 @@ function Container() {
         : currentPage;
 
     try {
-      const result = !searchGenre
-        ? await fetchMoviesAndTvShows(
-            searchQuery,
-            searchLanguage,
-            pageToFetch,
-            searchType
-          )
-        : await fetchMoviesAndTvShowsWithGenres(
-            searchLanguage,
-            pageToFetch,
-            type,
-            searchGenre
-          );
+      let result;
 
-      processResult(result, pageToFetch);
+      if (searchGenre) {
+        result = await fetchMoviesAndTvShowsWithGenres(
+          searchLanguage,
+          pageToFetch,
+          searchType,
+          searchGenre
+        );
+        setSearchResultsType(genreMapping);
+        setIsSearchedByTrending(false);
+      } else if (searchQuery) {
+        result = await fetchMoviesAndTvShows(
+          searchQuery,
+          searchLanguage,
+          pageToFetch,
+          searchType
+        );
+        setSearchResultsType(queryMapping);
+        setIsSearchedByTrending(false);
+      } else if (!searchQuery && !searchGenre && isSearchedByTrending) {
+        result = await fetchTrendingMoviesAndTvShows(
+          searchLanguage,
+          pageToFetch,
+          searchType
+        );
+        setSearchResultsType(trendingMapping);
+        setIsSearchedByTrending(true);
+      } else
+        result =
+          "To search type something, choose a genre or look what is trending";
 
-      setQuery(searchQuery);
-      setLanguage(searchLanguage);
-      setType(searchType);
-      setGenre(searchGenre);
-      setHasSearched(true);
+      if (result) {
+        processResult(result, pageToFetch);
+        setQuery(searchQuery);
+        setLanguage(searchLanguage);
+        setType(searchType);
+        setGenre(searchGenre);
+        setHasSearched(true);
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error("Error during search:", error);
     } finally {
@@ -92,17 +122,23 @@ function Container() {
 
   const handlePageChange = async (page) => {
     setLoading(true);
-    if (!genre) {
-      const result = await fetchMoviesAndTvShows(query, language, page, type);
-      processResult(result, page);
-    } else {
-      const result = await fetchMoviesAndTvShowsWithGenres(
+    let result;
+    if (!genre && query) {
+      result = await fetchMoviesAndTvShows(query, language, page, type);
+    } else if (genre && !query) {
+      result = await fetchMoviesAndTvShowsWithGenres(
         language,
         page,
         type,
         genre
       );
+    } else if (!genre && !query && isSearchedByTrending) {
+      result = await fetchTrendingMoviesAndTvShows(language, page, type);
+    }
+    if (result) {
       processResult(result, page);
+    } else {
+      return null;
     }
   };
 
@@ -111,11 +147,7 @@ function Container() {
   };
 
   return (
-    <div
-      className={`container-fluid p-2 mt-4 bg-dark overflow-hidden ${
-        !query && !genre ? "app-container" : ""
-      }`}
-    >
+    <div className="container-fluid p-2 mt-4 bg-dark overflow-hidden">
       <div
         className={`row justify-content-center ${
           hasSearched ? "mt-0" : "mt-5"

@@ -16,6 +16,7 @@ const SearchProvider = ({ children }) => {
   const [isGridView, setIsGridView] = useState(true);
   const [type, setType] = useState("Movies");
   const previousTypeRef = useRef(type);
+  const previousLanguageRef = useRef(language);
   const [genre, setGenre] = useState([]);
   const [searchGenre, setSearchGenre] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -27,6 +28,8 @@ const SearchProvider = ({ children }) => {
   const [isGenreModalOpen, setIsGenreModalOpen] = useState(false);
   const [localSelectedGenres, setLocalSelectedGenres] =
     useState(selectedGenres);
+  const [isSearchedByTrending, setIsSearchedByTrending] = useState(null);
+  const [searchResultsType, setSearchResultsType] = useState("");
 
   const contextValue = useMemo(
     () => ({
@@ -70,6 +73,11 @@ const SearchProvider = ({ children }) => {
       localSelectedGenres,
       setLocalSelectedGenres,
       previousTypeRef,
+      isSearchedByTrending,
+      setIsSearchedByTrending,
+      previousLanguageRef,
+      searchResultsType,
+      setSearchResultsType,
     }),
     [
       items,
@@ -112,6 +120,11 @@ const SearchProvider = ({ children }) => {
       localSelectedGenres,
       setLocalSelectedGenres,
       previousTypeRef,
+      isSearchedByTrending,
+      setIsSearchedByTrending,
+      previousLanguageRef,
+      searchResultsType,
+      setSearchResultsType,
     ]
   );
 

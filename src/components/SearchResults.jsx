@@ -7,7 +7,13 @@ import { useContext } from "react";
 import useDisabledScrolling from "../hooks/useDisabledScrolling";
 import { renderItemDetails } from "../utils/renderItemDetails";
 import { openInNewTab } from "../utils/openInNewTab";
-import { TMDB, typeMappingForStreaming } from "../constants/constants";
+import {
+  genreMapping,
+  queryMapping,
+  TMDB,
+  trendingMapping,
+  typeMappingForStreaming,
+} from "../constants/constants";
 import StreamingPlatforms from "./StreamingPlatforms";
 import { SiThemoviedatabase } from "react-icons/si";
 
@@ -21,6 +27,10 @@ function SearchResults({ onPageChange, onViewToggle }) {
     type,
     selectedItem,
     setSelectedItem,
+    searchResultsType,
+    query,
+    genreList,
+    searchGenre,
   } = useContext(SearchContext);
 
   useDisabledScrolling(selectedItem);
@@ -36,6 +46,12 @@ function SearchResults({ onPageChange, onViewToggle }) {
     openInNewTab(correctUrl);
   };
 
+  const getUserGenreNames = () => {
+    return genreList[type]
+      .filter((genre) => searchGenre.includes(genre.id))
+      .map((genre) => genre.name);
+  };
+
   const renderItem = (item) => {
     const { title, overview, posterPath, year } = renderItemDetails(
       type,
@@ -46,11 +62,11 @@ function SearchResults({ onPageChange, onViewToggle }) {
     return (
       <div
         className={`fade-in
-          ${
-            isGridView
-              ? "col-lg-6 col-xl-4 mb-4"
-              : "list-group-item m-2 hover-effect rounded"
-          }`}
+        ${
+          isGridView
+            ? "col-lg-6 col-xl-4 mb-4"
+            : "list-group-item m-2 hover-effect rounded"
+        }`}
         key={item.id}
       >
         {isGridView ? (
@@ -98,7 +114,14 @@ function SearchResults({ onPageChange, onViewToggle }) {
 
   return (
     <div>
-      <h2 className="text-center">Search Results</h2>
+      <h2 className="text-center header-white">Search Results for {type} </h2>
+      <h5 className="text-center header-white h5">
+        {searchResultsType === trendingMapping && "Trending this week"}
+        {searchResultsType === queryMapping && `You searched for '${query}'`}
+        {searchResultsType === genreMapping &&
+          searchGenre.length > 0 &&
+          `You searched with genres '${getUserGenreNames().join(", ")}'`}
+      </h5>
       {items.length > 0 && (
         <div className="d-flex justify-content-end mb-3">
           <button className="btn btn-outline-primary" onClick={onViewToggle}>

@@ -9,3 +9,6 @@ export const typeMappingForStreaming = {
   "TV Shows": "tv/",
   Movies: "movie/",
 };
+export const genreMapping = "genre";
+export const queryMapping = "query";
+export const trendingMapping = "trending";
