@@ -18,7 +18,6 @@ const apiUrls = {
 
 async function fetchData(apiUrl, params, headers) {
   try {
-    console.log(params);
     const response = await axios.get(apiUrl, { params, headers });
     return response.data;
   } catch (error) {
