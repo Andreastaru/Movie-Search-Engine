@@ -24,9 +24,13 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
           className={`page-item ${currentPage === i ? "active" : ""}`}
           key={i}
         >
-          <a className="page-link" href="#" onClick={() => onPageChange(i)}>
+          <button
+            className="page-link"
+            href="#"
+            onClick={() => onPageChange(i)}
+          >
             {i}
-          </a>
+          </button>
         </li>
       );
     }
@@ -34,20 +38,24 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
     if (startPage > 1) {
       items.unshift(
         <li className="page-item" key="start-ellipsis">
-          <a
+          <button
             className="page-link"
             href="#"
             onClick={() => onPageChange(startPage - 1)}
           >
             ...
-          </a>
+          </button>
         </li>
       );
       items.unshift(
         <li className="page-item" key={1}>
-          <a className="page-link" href="#" onClick={() => onPageChange(1)}>
+          <button
+            className="page-link"
+            href="#"
+            onClick={() => onPageChange(1)}
+          >
             1
-          </a>
+          </button>
         </li>
       );
     }
@@ -55,24 +63,24 @@ function Pagination({ totalPages, currentPage, onPageChange }) {
     if (endPage < effectiveTotalPages) {
       items.push(
         <li className="page-item" key="end-ellipsis">
-          <a
+          <button
             className="page-link"
             href="#"
             onClick={() => onPageChange(endPage + 1)}
           >
             ...
-          </a>
+          </button>
         </li>
       );
       items.push(
         <li className="page-item" key={effectiveTotalPages}>
-          <a
+          <button
             className="page-link"
             href="#"
             onClick={() => onPageChange(effectiveTotalPages)}
           >
             {effectiveTotalPages}
-          </a>
+          </button>
         </li>
       );
     }

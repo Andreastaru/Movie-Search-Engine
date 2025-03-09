@@ -7,8 +7,9 @@ import { useContext } from "react";
 import useDisabledScrolling from "../hooks/useDisabledScrolling";
 import { renderItemDetails } from "../utils/renderItemDetails";
 import { openInNewTab } from "../utils/openInNewTab";
-import { IMDB } from "../constants/constants";
+import { TMDB, typeMappingForStreaming } from "../constants/constants";
 import StreamingPlatforms from "./StreamingPlatforms";
+import { SiThemoviedatabase } from "react-icons/si";
 
 function SearchResults({ onPageChange, onViewToggle }) {
   const {
@@ -29,15 +30,16 @@ function SearchResults({ onPageChange, onViewToggle }) {
   };
 
   const titleClick = (title) => {
-    const correctUrl = IMDB + title;
+    const path = typeMappingForStreaming[type] + title;
+    const correctUrl = TMDB + path;
     openInNewTab(correctUrl);
   };
 
   const renderItem = (item) => {
     const { title, overview, posterPath, year } = renderItemDetails(
-      item,
       type,
-      language
+      language,
+      item
     );
 
     return (
@@ -54,13 +56,16 @@ function SearchResults({ onPageChange, onViewToggle }) {
           <div className="card rounded" style={{ height: "100%" }}>
             <img src={posterPath} className="card-img-top" alt={title} />
             <div className="card-body bg-light">
-              <h5
-                className="card-title hover-effect-text pb-2"
-                onClick={() => titleClick(title)}
-                title={IMDB + title}
-                aria-label={title}
-              >
+              <h5 className="card-title pb-2" title={title} aria-label={title}>
                 {title} {year}
+                <SiThemoviedatabase
+                  onClick={() => titleClick(item.id)}
+                  className="hover-effect-text logo-click"
+                  size={36}
+                  style={{
+                    marginLeft: "0.5rem",
+                  }}
+                />
               </h5>
               <StreamingPlatforms item={item} />
               <p
@@ -75,11 +80,16 @@ function SearchResults({ onPageChange, onViewToggle }) {
             </div>
           </div>
         ) : (
-          <div onClick={() => handleItemClick(item)}>
+          <button
+            onClick={() => handleItemClick(item)}
+            className="clicker container"
+            tabIndex={0}
+            aria-label={title}
+          >
             <h5 aria-label={title}>
               {title} {year}
             </h5>
-          </div>
+          </button>
         )}
       </div>
     );

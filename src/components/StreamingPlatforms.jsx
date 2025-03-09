@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import SearchContext from "../context/SearchContext";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { fetchStreamingPlatforms } from "../api/ApiCalls";
+import { typeMappingForStreaming } from "../constants/constants";
 
 const StreamingPlatforms = ({ item, modalButton }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,11 +12,6 @@ const StreamingPlatforms = ({ item, modalButton }) => {
   const [details, setDetails] = useState(null);
   const { type } = useContext(SearchContext);
   const [error, setError] = useState(null);
-
-  const typeMappingForStreaming = {
-    "TV Shows": "tv/",
-    Movies: "movie/",
-  };
 
   const fetchStreamingPlatformsFromApi = async (id) => {
     try {
@@ -94,8 +90,11 @@ const StreamingPlatforms = ({ item, modalButton }) => {
         ></button>
         <h5>Streaming Details</h5>
         <div className={modalButton ? "streaming-details-wrapper" : ""}>
-          {details.map((detail, index) => (
-            <div key={index} className="mb-3">
+          {details.map((detail) => (
+            <div
+              key={detail.type + detail.platform + detail.price}
+              className="mb-3"
+            >
               <img
                 src={detail.image}
                 alt={`${detail.platform} logo`}
@@ -129,7 +128,7 @@ const StreamingPlatforms = ({ item, modalButton }) => {
     output = (
       <div>
         {Object.keys(feedback).map((code) => (
-          <span
+          <button
             tabIndex={0}
             key={code}
             className={`fi fi-${code} rounded m-2 custom-flag`}
@@ -142,7 +141,7 @@ const StreamingPlatforms = ({ item, modalButton }) => {
               }
             }}
             aria-label={`Flag for ${code}`}
-          ></span>
+          ></button>
         ))}
       </div>
     );

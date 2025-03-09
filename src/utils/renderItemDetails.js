@@ -1,6 +1,6 @@
 import { Movies, TVShows, English, Estonian } from "../constants/constants";
 
-export const renderItemDetails = (item = {}, type, language) => {
+export const renderItemDetails = (type, language, item = {}) => {
   let title = "";
   let overview = "";
   let posterPath = "";
@@ -23,8 +23,7 @@ export const renderItemDetails = (item = {}, type, language) => {
     ? `https://image.tmdb.org/t/p/w500/${item.poster_path}`
     : blankPicture;
 
-  const getYear = (date) =>
-    date && date.trim() ? `(${date.split("-")[0]})` : "";
+  const getYear = (date) => (date?.trim() ? `(${date.split("-")[0]})` : "");
 
   const getOverview = (overview, fallback) => {
     return overview && overview.trim() !== "" ? overview : fallback;

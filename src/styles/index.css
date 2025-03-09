@@ -187,6 +187,7 @@ button:hover {
 
   .custom-flag {
     display: inline-block;
+    border:inherit;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
     transition: opacity 0.3s ease; 
   }
@@ -206,5 +207,21 @@ button:hover {
     max-height: 200px; 
     overflow-y: auto; 
     width: 100%; 
+  }
+
+  .logo-click:hover {
+    opacity: 50%;
+  }
+
+  .clicker {
+    max-height: 100%;
+    max-width: 100%;
+    border: none;
+    background-color: inherit;
+    display: block;
+  }
+
+  .clicker:hover {
+    background-color: inherit;
   }
   

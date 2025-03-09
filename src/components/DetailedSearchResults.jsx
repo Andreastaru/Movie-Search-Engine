@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
 import { renderItemDetails } from "../utils/renderItemDetails";
 import { handleBackdropClick } from "../utils/handleModuleBackDropClick";
-import { IMDB } from "../constants/constants";
 import StreamingPlatforms from "./StreamingPlatforms";
+import { SiThemoviedatabase } from "react-icons/si";
 
 function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
   const { title, overview, posterPath, year } = renderItemDetails(
-    item,
     type,
-    language
+    language,
+    item
   );
 
   return (
@@ -20,13 +20,16 @@ function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5
-              className="modal-title hover-effect-text"
-              onClick={() => titleClick(title)}
-              title={IMDB + title}
-              aria-label={title}
-            >
+            <h5 className="modal-title" title={title} aria-label={title}>
               {title} {year}
+              <SiThemoviedatabase
+                onClick={() => titleClick(item.id)}
+                className="hover-effect-text logo-click"
+                size={36}
+                style={{
+                  marginLeft: "0.5rem",
+                }}
+              />
             </h5>
             <button
               type="button"

@@ -128,10 +128,10 @@ function Container() {
       {hasSearched && (
         <div className="row justify-content-center mt-4">
           <div className="col-12 col-md-8 ">
-            {loading ? (
-              <div className="text-white text-center">Loading...</div>
-            ) : error ? (
-              <div className="text-white text-center">{error}</div>
+            {loading || error ? (
+              <div className="text-white text-center">
+                {loading ? "Loading..." : error}
+              </div>
             ) : (
               <SearchResults
                 onPageChange={handlePageChange}
