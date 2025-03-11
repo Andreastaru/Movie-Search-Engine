@@ -16,6 +16,7 @@ import {
 } from "../constants/constants";
 import StreamingPlatforms from "./StreamingPlatforms";
 import { SiThemoviedatabase } from "react-icons/si";
+import { getGenreNames } from "../utils/getGenreNames";
 
 function SearchResults({ onPageChange, onViewToggle }) {
   const {
@@ -46,14 +47,8 @@ function SearchResults({ onPageChange, onViewToggle }) {
     openInNewTab(correctUrl);
   };
 
-  const getUserGenreNames = () => {
-    return genreList[type]
-      .filter((genre) => searchGenre.includes(genre.id))
-      .map((genre) => genre.name);
-  };
-
   const renderItem = (item) => {
-    const { title, overview, posterPath, year } = renderItemDetails(
+    const { title, overview, genres, posterPath, year } = renderItemDetails(
       type,
       language,
       item
@@ -73,7 +68,7 @@ function SearchResults({ onPageChange, onViewToggle }) {
           <div className="card rounded" style={{ height: "100%" }}>
             <img src={posterPath} className="card-img-top" alt={title} />
             <div className="card-body bg-light">
-              <h5 className="card-title pb-2" title={title} aria-label={title}>
+              <h5 className="card-title pb-0" title={title} aria-label={title}>
                 {title} {year}
                 <SiThemoviedatabase
                   onClick={() => titleClick(item.id)}
@@ -84,6 +79,9 @@ function SearchResults({ onPageChange, onViewToggle }) {
                   }}
                 />
               </h5>
+              <h6 className="card-text pb-2 ">
+                {getGenreNames(genreList, type, genres)}
+              </h6>
               <StreamingPlatforms item={item} />
               <p
                 className="card-text"
@@ -120,7 +118,11 @@ function SearchResults({ onPageChange, onViewToggle }) {
         {searchResultsType === queryMapping && `You searched for '${query}'`}
         {searchResultsType === genreMapping &&
           searchGenre.length > 0 &&
-          `You searched with genres '${getUserGenreNames().join(", ")}'`}
+          `You searched with genres '${getGenreNames(
+            genreList,
+            type,
+            searchGenre
+          )}'`}
       </h5>
       {items.length > 0 && (
         <div className="d-flex justify-content-end mb-3">

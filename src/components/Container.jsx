@@ -13,10 +13,13 @@ import {
   queryMapping,
   genreMapping,
 } from "../constants/constants";
+import { updateGenreList } from "../utils/updateGenreList";
 
 function Container() {
   const {
     setItems,
+    genreList,
+    setGenreList,
     setTotalPages,
     currentPage,
     setCurrentPage,
@@ -104,6 +107,9 @@ function Container() {
           "To search type something, choose a genre or look what is trending";
 
       if (result) {
+        if (!genreList[searchType]) {
+          await updateGenreList(searchType, setGenreList);
+        }
         processResult(result, pageToFetch);
         setQuery(searchQuery);
         setLanguage(searchLanguage);

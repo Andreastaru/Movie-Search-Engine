@@ -3,13 +3,18 @@ import { renderItemDetails } from "../utils/renderItemDetails";
 import { handleBackdropClick } from "../utils/handleModuleBackDropClick";
 import StreamingPlatforms from "./StreamingPlatforms";
 import { SiThemoviedatabase } from "react-icons/si";
+import { getGenreNames } from "../utils/getGenreNames";
+import SearchContext from "../context/SearchContext";
+import { useContext } from "react";
 
 function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
-  const { title, overview, posterPath, year } = renderItemDetails(
+  const { title, overview, genres, posterPath, year } = renderItemDetails(
     type,
     language,
     item
   );
+
+  const { genreList } = useContext(SearchContext);
 
   return (
     <div
@@ -43,6 +48,9 @@ function DetailedSearchResults({ item, type, onClose, language, titleClick }) {
               className="img-fluid mb-3 custom-image align-center"
               alt={title}
             />
+            <h6 className="card-text pb-2">
+              {getGenreNames(genreList, type, genres)}
+            </h6>
             <p>{overview}</p>
           </div>
           <div className="modal-footer-custom">

@@ -11,6 +11,7 @@ export const renderItemDetails = (type, language, item = {}) => {
   let overview = "";
   let posterPath = "";
   let year = "";
+  let genres = "";
 
   const descriptionMovie = {
     [English]: `${Movies} Description is missing`,
@@ -41,6 +42,7 @@ export const renderItemDetails = (type, language, item = {}) => {
     switch (type) {
       case Movies:
         title = item.title || "Unknown Title";
+        genres = item.genre_ids;
         overview = getOverview(item.overview, descriptionMovie[language]);
         posterPath = itemPicture;
         year = getYear(item.release_date);
@@ -48,6 +50,7 @@ export const renderItemDetails = (type, language, item = {}) => {
 
       case TVShows:
         title = item.name || "Unknown Name";
+        genres = item.genre_ids;
         overview = getOverview(item.overview, descriptionTVShows[language]);
         posterPath = itemPicture;
         year = getYear(item.first_air_date);
@@ -60,5 +63,5 @@ export const renderItemDetails = (type, language, item = {}) => {
     console.error("Error rendering item details:", error);
   }
 
-  return { title, overview, posterPath, year };
+  return { title, genres, overview, posterPath, year };
 };

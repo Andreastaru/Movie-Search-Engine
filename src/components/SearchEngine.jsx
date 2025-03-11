@@ -9,10 +9,10 @@ import {
 } from "../constants/constants";
 import PropTypes from "prop-types";
 import { Container, Button } from "react-bootstrap";
-import { fetchGenreTypesForTvOrMovies } from "../api/ApiCalls";
 import SearchContext from "../context/SearchContext";
 import GenreModal from "./GenreModal";
 import useDisabledScrolling from "../hooks/useDisabledScrolling";
+import { updateGenreList } from "../utils/updateGenreList";
 
 function SearchEngine({ onSearch }) {
   const {
@@ -98,14 +98,9 @@ function SearchEngine({ onSearch }) {
     onSearch(deferredQuery, language, type, isGenreEnabled && searchGenre);
   };
 
-  const handleGenreClick = () => {
+  const handleGenreClick = async () => {
     if (!genreList[type]) {
-      fetchGenreTypesForTvOrMovies(type).then((genres) => {
-        setGenreList((prevGenreList) => ({
-          ...prevGenreList,
-          [type]: genres,
-        }));
-      });
+      await updateGenreList(type, setGenreList);
     }
     setIsGenreModalOpen(true);
   };
